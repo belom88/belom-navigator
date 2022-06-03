@@ -1,8 +1,7 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import App from "./app";
 
-const el = document.createElement("div");
-document.body.append(el);
-
-ReactDOM.render(React.createElement(App, null, null), el);
+const el = document.getElementById("root");
+const root = ReactDOM.createRoot(el!);
+root.render(React.createElement(App, null, null));

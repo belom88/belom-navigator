@@ -10,7 +10,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Navigator Code Challenge",
+      template: path.join(__dirname, "src", "index.html"),
     }),
   ],
   module: {
@@ -21,10 +21,14 @@ module.exports = {
         exclude: /node_modules/,
         options: { presets: ["@babel/env"] },
       },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts"],
+    extensions: [".tsx", ".ts", ".js"],
   },
   output: {
     filename: "bundle.js",
