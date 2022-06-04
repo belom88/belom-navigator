@@ -35,6 +35,6 @@
     "react-leaflet": "^4.0.0",
     "styled-components": "^5.3.5"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Viktor Belomestnov",
+  "license": "MIT"
 }
