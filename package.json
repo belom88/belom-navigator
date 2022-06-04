@@ -1,0 +1,40 @@
+{
+  "name": "belom-navigator",
+  "version": "1.0.0",
+  "description": "Code challege application for Huawei Research Center Germany",
+  "scripts": {
+    "start": "webpack serve --open",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.12",
+    "@babel/preset-env": "^7.17.12",
+    "@babel/preset-react": "^7.17.12",
+    "@babel/preset-typescript": "^7.17.12",
+    "@tsconfig/create-react-app": "^1.0.2",
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/leaflet": "^1.7.10",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4",
+    "@types/styled-components": "^5.1.25",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.6.4",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.1"
+  },
+  "dependencies": {
+    "@googlemaps/polyline-codec": "^1.0.28",
+    "leaflet": "^1.8.0",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "react-leaflet": "^4.0.0",
+    "styled-components": "^5.3.5"
+  },
+  "author": "Viktor Belomestnov",
+  "license": "MIT"
+}
