@@ -3,6 +3,9 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { DirectionsResult } from "./types/directions-result";
 import "./index.css";
 import "leaflet/dist/leaflet.css";
+import Bounds from "./components/bounds";
+import Route from "./components/route";
+import { EndPoint, StartPoint } from "./components/points";
 
 export default function App() {
   const [directionsResult, setDirectionsResult] =
@@ -18,20 +21,42 @@ export default function App() {
 
   return (
     <MapContainer
-      center={[51.505, -0.09]}
-      zoom={13}
-      scrollWheelZoom={false}
+      center={[0, 0]}
+      zoom={9}
+      scrollWheelZoom={true}
       style={{ height: "100vh", width: "100wh" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[51.505, -0.09]}>
-        <Popup>
-          A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
-      </Marker>
+      {directionsResult?.routes.map((route) => (
+        <Route key={route.overview_polyline.points} route={route}></Route>
+      ))}
+      {directionsResult && (
+        <StartPoint
+          center={[
+            directionsResult.waypoints[0].location[1],
+            directionsResult.waypoints[0].location[0],
+          ]}
+          tooltipMessage={directionsResult.waypoints[0].name}
+        />
+      )}
+      {directionsResult && (
+        <EndPoint
+          center={[
+            directionsResult.waypoints[directionsResult.waypoints.length - 1]
+              .location[1],
+            directionsResult.waypoints[directionsResult.waypoints.length - 1]
+              .location[0],
+          ]}
+          tooltipMessage={
+            directionsResult.waypoints[directionsResult.waypoints.length - 1]
+              .name
+          }
+        />
+      )}
+      <Bounds routes={directionsResult?.routes}></Bounds>
     </MapContainer>
   );
 }

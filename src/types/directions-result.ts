@@ -4,7 +4,7 @@ export type DirectionsResult = {
   waypoints: DirectionWaypoint[];
 };
 
-type DirectionRoute = {
+export type DirectionRoute = {
   bounds: {
     northeast: CartographicCoordinates;
     southwest: CartographicCoordinates;
@@ -36,7 +36,7 @@ type DirectionLeg = {
   via_waypoint: [];
 };
 
-type DirectionsStep = {
+export type DirectionsStep = {
   distance: {
     text: string;
     value: number;
@@ -96,12 +96,12 @@ type TimeWithTimeZone = {
   value: number;
 };
 
-type CartographicCoordinates = {
+export type CartographicCoordinates = {
   lat: number;
   lng: number;
 };
 
-type CartographicCoordinatesTuple = [number, number];
+export type CartographicCoordinatesTuple = [number, number];
 
 type TransitStop = {
   location: CartographicCoordinates;
