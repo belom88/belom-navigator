@@ -1,10 +1,10 @@
 import { Map } from "leaflet";
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
-import { DirectionRoute } from "../types/directions-result";
-import { getSummaryBounds } from "../utils/directions-utils";
+import { DirectionRoute } from "../../types/directions-result";
+import { getSummaryBounds } from "../../utils/directions-utils";
 
-export default function Bounds({ routes }: { routes?: DirectionRoute[] }) {
+export default function LeafletBounds({ routes }: { routes?: DirectionRoute[] }) {
   const map: Map = useMap();
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { Polyline } from "react-leaflet";
-import { CartographicCoordinatesTuple } from "../types/directions-result";
+import { CartographicCoordinatesTuple } from "../../types/directions-result";
 
-export default function RouteOverview({
+export default function LeafletRouteOverview({
   polyline,
 }: {
   polyline: CartographicCoordinatesTuple[];

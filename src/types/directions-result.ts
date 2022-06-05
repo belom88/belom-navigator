@@ -21,7 +21,7 @@ export type DirectionRoute = {
   waypoint_order: [];
 };
 
-type DirectionLeg = {
+export type DirectionLeg = {
   arrival_time: TimeWithTimeZone;
   departure_time: TimeWithTimeZone;
   distance: number;

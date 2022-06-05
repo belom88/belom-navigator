@@ -1,9 +1,9 @@
 import { PolylineOptions } from "leaflet";
-import { ReactElement } from "react";
+import { Fragment, ReactElement } from "react";
 import { Polyline, Tooltip } from "react-leaflet";
-import { DirectionRoute, DirectionsStep } from "../types/directions-result";
-import { decodePolyline } from "../utils/directions-utils";
-import { StepPoint } from "./points";
+import { DirectionRoute, DirectionsStep } from "../../types/directions-result";
+import { decodePolyline } from "../../utils/directions-utils";
+import { LeafletStepPoint } from "./leaflet-points";
 
 type PolylineTree =
   | ReactElement
@@ -11,7 +11,11 @@ type PolylineTree =
       [key: number]: PolylineTree;
     };
 
-export default function RouteDetails({ route }: { route: DirectionRoute }) {
+export default function LeafletRouteDetails({
+  route,
+}: {
+  route: DirectionRoute;
+}) {
   function showStep(
     step: DirectionsStep,
     root: DirectionsStep | null = null
@@ -25,9 +29,8 @@ export default function RouteDetails({ route }: { route: DirectionRoute }) {
     } else {
       const polyline = decodePolyline(step.geometry);
       return (
-        <>
+        <Fragment key={step.geometry}>
           <Polyline
-            key={step.geometry}
             positions={polyline}
             pathOptions={{
               weight: 6,
@@ -38,14 +41,14 @@ export default function RouteDetails({ route }: { route: DirectionRoute }) {
             {/* {<Tooltip sticky>{(root || step).html_instructions}</Tooltip>} */}
           </Polyline>
           {/* Turn points for middle steps */}
-          <StepPoint center={step.start_location} radius={2}>
+          <LeafletStepPoint center={step.start_location} radius={2}>
             <Tooltip sticky>
               <div
                 dangerouslySetInnerHTML={{ __html: step.html_instructions }}
               ></div>
             </Tooltip>
-          </StepPoint>
-        </>
+          </LeafletStepPoint>
+        </Fragment>
       );
     }
   }
@@ -58,7 +61,7 @@ export default function RouteDetails({ route }: { route: DirectionRoute }) {
           (step) =>
             // Tranfer points end of steps (only for 'TRANSIT')
             step.travel_mode === "TRANSIT" && (
-              <StepPoint
+              <LeafletStepPoint
                 key={`${step.geometry}-end`}
                 center={step.end_location}
               />
@@ -70,7 +73,7 @@ export default function RouteDetails({ route }: { route: DirectionRoute }) {
           (step) =>
             // Tranfer points start of steps (only for 'TRANSIT')
             step.travel_mode === "TRANSIT" && (
-              <StepPoint
+              <LeafletStepPoint
                 key={`${step.geometry}-start`}
                 center={step.start_location}
               />
