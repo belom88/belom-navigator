@@ -64,7 +64,7 @@ type DirectionTransitDetails = {
   num_stops: number;
 };
 
-type DirectionWaypoint = {
+export type DirectionWaypoint = {
   distance: number;
   hint: string;
   location: CartographicCoordinatesTuple;

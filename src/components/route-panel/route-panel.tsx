@@ -16,7 +16,7 @@ const RoutePanelContainer = styled.div<{ collapsed: boolean }>`
   box-shadow: 0.3em 0.3em 0.4em #788;
   left: ${({ collapsed }) => (collapsed ? "-30em" : "0")};
   transition: left 900ms;
-  overflow: auto;
+  overflow-y: scroll;;
 `;
 
 const HideButton = styled.button<{ collapsed: boolean }>`

@@ -41,10 +41,15 @@ export function LeafletStepPoint({
 
 type EdgePointProps = {
   center: CartographicCoordinatesTuple;
-  tooltipMessage: string;
+  children?: ReactNode;
+  onClick?: LeafletMouseEventHandlerFn;
 };
 
-export function LeafletStartPoint({ center, tooltipMessage }: EdgePointProps) {
+export function LeafletStartPoint({
+  center,
+  children,
+  onClick,
+}: EdgePointProps) {
   return (
     <CircleMarker
       center={center}
@@ -56,13 +61,16 @@ export function LeafletStartPoint({ center, tooltipMessage }: EdgePointProps) {
         fillOpacity: 1,
       }}
       radius={5}
+      eventHandlers={{
+        click: onClick,
+      }}
     >
-      <Tooltip sticky>{tooltipMessage}</Tooltip>
+      {children}
     </CircleMarker>
   );
 }
 
-export function LeafletEndPoint({ center, tooltipMessage }: EdgePointProps) {
+export function LeafletEndPoint({ center, children, onClick }: EdgePointProps) {
   return (
     <>
       <CircleMarker
@@ -75,8 +83,11 @@ export function LeafletEndPoint({ center, tooltipMessage }: EdgePointProps) {
           fillOpacity: 1,
         }}
         radius={5}
+        eventHandlers={{
+          click: onClick,
+        }}
       >
-        <Tooltip sticky>{tooltipMessage}</Tooltip>
+        {children}
       </CircleMarker>
       <CircleMarker
         center={center}
@@ -88,8 +99,11 @@ export function LeafletEndPoint({ center, tooltipMessage }: EdgePointProps) {
           fillOpacity: 1,
         }}
         radius={1}
+        eventHandlers={{
+          click: onClick,
+        }}
       >
-        <Tooltip sticky>{tooltipMessage}</Tooltip>
+        {children}
       </CircleMarker>
     </>
   );

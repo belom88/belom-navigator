@@ -2,12 +2,9 @@ import { Map } from "leaflet";
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { DirectionRoute } from "../../types/directions-result";
-import {
-  getStepByGeometry,
-  getSummaryBounds,
-} from "../../utils/directions-utils";
+import { getSummaryBounds } from "../../utils/directions-utils";
 import { useAppSelector } from "../../redux/redux-hooks";
-import { selectStep } from "../../redux/slices/step-slice";
+import { selectHighlight } from "../../redux/slices/highlight-slice";
 
 export default function LeafletBounds({
   routes,
@@ -15,7 +12,7 @@ export default function LeafletBounds({
   routes?: DirectionRoute[];
 }) {
   const map: Map = useMap();
-  const selectedStep = useAppSelector(selectStep);
+  const selectedHighlight = useAppSelector(selectHighlight);
 
   function fitBounds() {
     const newBounds = getSummaryBounds(routes);
@@ -26,16 +23,37 @@ export default function LeafletBounds({
 
   useEffect(() => {
     // Show start point
-    if (routes && selectedStep?.type === "NESTED") {
-      const step = getStepByGeometry(selectedStep.geometry, routes);
-      if (step) {
-        map.setView(step?.start_location, 15);
+    if (routes) {
+      if (selectedHighlight?.type === "NESTED") {
+        const step = selectedHighlight.step;
+        if (step) {
+          map.setView(step?.start_location, 15);
+        }
+      } else if (selectedHighlight?.type === "START_END") {
+        // TODO: works only for 1 route with 1 leg
+        const leg = routes?.[0]?.legs?.[0];
+        if (leg) {
+          if (selectedHighlight.edge === "START") {
+            map.setView(leg.start_location, 15);
+          } else if (selectedHighlight.edge === "END") {
+            map.setView(leg.end_location, 15);
+          }
+        }
+      } else if (selectedHighlight?.type === "STOP") {
+        const { step, edge } = selectedHighlight;
+        if (step) {
+          if (edge === "START") {
+            map.setView(step.transit_details.departure_stop.location, 15);
+          } else if (edge === "END") {
+            map.setView(step.transit_details.arrival_stop.location, 15);
+          }
+        }
       }
     }
-    if (selectedStep === null) {
+    if (selectedHighlight === null) {
       fitBounds();
     }
-  }, [selectedStep]);
+  }, [selectedHighlight]);
 
   useEffect(() => {
     fitBounds();

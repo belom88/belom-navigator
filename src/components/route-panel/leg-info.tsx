@@ -60,7 +60,9 @@ export default function LegInfo({ leg }: { leg: DirectionLeg }) {
       <Splitter />
       <StepsInfo
         departureTime={leg.departure_time.value}
+        startAddress={leg.start_address}
         arrivalTime={leg.arrival_time.value}
+        endAddress={leg.end_address}
         steps={leg.steps}
       />
     </>
