@@ -3,7 +3,7 @@ import { CircleMarker, Tooltip } from "react-leaflet";
 import {
   CartographicCoordinates,
   CartographicCoordinatesTuple,
-} from "../types/directions-result";
+} from "../../types/directions-result";
 
 type PointProps = {
   center: CartographicCoordinates;
@@ -11,7 +11,7 @@ type PointProps = {
   children?: ReactNode;
 };
 
-export function StepPoint({ center, children, radius = 4 }: PointProps) {
+export function LeafletStepPoint({ center, children, radius = 4 }: PointProps) {
   return (
     <CircleMarker
       center={[center.lat, center.lng]}
@@ -34,7 +34,7 @@ type EdgePointProps = {
   tooltipMessage: string;
 };
 
-export function StartPoint({ center, tooltipMessage }: EdgePointProps) {
+export function LeafletStartPoint({ center, tooltipMessage }: EdgePointProps) {
   return (
     <CircleMarker
       center={center}
@@ -52,7 +52,7 @@ export function StartPoint({ center, tooltipMessage }: EdgePointProps) {
   );
 }
 
-export function EndPoint({ center, tooltipMessage }: EdgePointProps) {
+export function LeafletEndPoint({ center, tooltipMessage }: EdgePointProps) {
   return (
     <>
       <CircleMarker
