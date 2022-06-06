@@ -1,11 +1,12 @@
 import { LeafletMouseEvent, PolylineOptions } from "leaflet";
 import { Fragment, ReactElement } from "react";
-import { Polyline, Tooltip } from "react-leaflet";
+import { Polyline } from "react-leaflet";
 import { DirectionRoute, DirectionsStep } from "../../types/directions-result";
 import { decodePolyline } from "../../utils/directions-utils";
 import { LeafletStepPoint } from "./leaflet-points";
 import { useAppSelector, useAppDispatch } from "../../redux/redux-hooks";
-import { selectStep, set } from "../../redux/slices/step-slice";
+import { selectHighlight, set } from "../../redux/slices/highlight-slice";
+import LeafletTooltipForHighlight from "./leaflet-tooltip-for-highlight";
 
 type PolylineTree =
   | ReactElement
@@ -18,13 +19,28 @@ export default function LeafletRouteDetails({
 }: {
   route: DirectionRoute;
 }) {
-  const selectedStep = useAppSelector(selectStep);
+  const selectedHighlight = useAppSelector(selectHighlight);
   const dispatch = useAppDispatch();
-  function toggleNestedStep(stepGeometry: string) {
-    if (selectedStep?.geometry === stepGeometry) {
-      dispatch(set({ value: { geometry: "", type: "NESTED" } }));
+  function toggleNestedStep(step: DirectionsStep) {
+    if (
+      selectedHighlight?.type === "NESTED" &&
+      selectedHighlight?.step?.geometry === step.geometry
+    ) {
+      dispatch(set({ value: { type: "NESTED" } }));
     } else {
-      dispatch(set({ value: { geometry: stepGeometry, type: "NESTED" } }));
+      dispatch(set({ value: { step, type: "NESTED" } }));
+    }
+  }
+
+  function toggleStop(step: DirectionsStep, edge: "START" | "END") {
+    if (
+      selectedHighlight?.type === "STOP" &&
+      selectedHighlight?.step?.geometry === step.geometry &&
+      selectedHighlight?.edge === edge
+    ) {
+      dispatch(set({ value: { type: "STOP" } }));
+    } else {
+      dispatch(set({ value: { step, edge, type: "STOP" } }));
     }
   }
 
@@ -40,8 +56,6 @@ export default function LeafletRouteDetails({
       return steps;
     } else {
       const polyline = decodePolyline(step.geometry);
-      const isPermanent = selectedStep?.geometry === step.geometry;
-
       return (
         <Fragment key={step.geometry}>
           <Polyline
@@ -51,31 +65,16 @@ export default function LeafletRouteDetails({
               opacity: 1,
               ...getStepSpecificOption(step),
             }}
-          >
-            {/* {<Tooltip sticky>{(root || step).html_instructions}</Tooltip>} */}
-          </Polyline>
+          />
           {/* Turn points for middle steps */}
           <LeafletStepPoint
             center={step.start_location}
             radius={2}
             onClick={(event: LeafletMouseEvent) => {
-              toggleNestedStep(step.geometry);
+              toggleNestedStep(step);
             }}
           >
-            {isPermanent && (
-              <Tooltip permanent interactive>
-                <div
-                  dangerouslySetInnerHTML={{ __html: step.html_instructions }}
-                ></div>
-              </Tooltip>
-            )}
-            {!isPermanent && (
-              <Tooltip>
-                <div
-                  dangerouslySetInnerHTML={{ __html: step.html_instructions }}
-                ></div>
-              </Tooltip>
-            )}
+            <LeafletTooltipForHighlight mode="NESTED" step={step} />
           </LeafletStepPoint>
         </Fragment>
       );
@@ -93,7 +92,16 @@ export default function LeafletRouteDetails({
               <LeafletStepPoint
                 key={`${step.geometry}-end`}
                 center={step.end_location}
-              />
+                onClick={(event: LeafletMouseEvent) => {
+                  toggleStop(step, "END");
+                }}
+              >
+                <LeafletTooltipForHighlight
+                  mode="STOP"
+                  step={step}
+                  edge="END"
+                ></LeafletTooltipForHighlight>
+              </LeafletStepPoint>
             )
         )
       )}
@@ -105,7 +113,16 @@ export default function LeafletRouteDetails({
               <LeafletStepPoint
                 key={`${step.geometry}-start`}
                 center={step.start_location}
-              />
+                onClick={(event: LeafletMouseEvent) => {
+                  toggleStop(step, "START");
+                }}
+              >
+                <LeafletTooltipForHighlight
+                  mode="STOP"
+                  step={step}
+                  edge="START"
+                ></LeafletTooltipForHighlight>
+              </LeafletStepPoint>
             )
         )
       )}

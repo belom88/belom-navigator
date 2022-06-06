@@ -5,11 +5,8 @@ import "./index.css";
 import "leaflet/dist/leaflet.css";
 import LeafletBounds from "./components/leaflet/leaflet-bounds";
 import Route from "./components/leaflet/leaflet-route";
-import {
-  LeafletEndPoint,
-  LeafletStartPoint,
-} from "./components/leaflet/leaflet-points";
 import RoutePanel from "./components/route-panel/route-panel";
+import LeafletEdgePoints from "./components/leaflet/leaflet-edge-points";
 
 export default function App() {
   const [directionsResult, setDirectionsResult] =
@@ -41,27 +38,7 @@ export default function App() {
           <Route key={route.overview_polyline.points} route={route}></Route>
         ))}
         {directionsResult && (
-          <LeafletStartPoint
-            center={[
-              directionsResult.waypoints[0].location[1],
-              directionsResult.waypoints[0].location[0],
-            ]}
-            tooltipMessage={directionsResult.waypoints[0].name}
-          />
-        )}
-        {directionsResult && (
-          <LeafletEndPoint
-            center={[
-              directionsResult.waypoints[directionsResult.waypoints.length - 1]
-                .location[1],
-              directionsResult.waypoints[directionsResult.waypoints.length - 1]
-                .location[0],
-            ]}
-            tooltipMessage={
-              directionsResult.waypoints[directionsResult.waypoints.length - 1]
-                .name
-            }
-          />
+          <LeafletEdgePoints waypoints={directionsResult.waypoints} />
         )}
         <LeafletBounds routes={directionsResult?.routes} />
       </MapContainer>

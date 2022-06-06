@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import stepReducer from "./slices/step-slice";
+import highlightReducer from "./slices/highlight-slice";
 
 const store = configureStore({
   reducer: {
-    step: stepReducer,
+    highlight: highlightReducer,
   },
 });
 
