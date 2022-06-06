@@ -1,3 +1,4 @@
+import { LeafletMouseEventHandlerFn } from "leaflet";
 import { ReactNode } from "react";
 import { CircleMarker, Tooltip } from "react-leaflet";
 import {
@@ -9,11 +10,20 @@ type PointProps = {
   center: CartographicCoordinates;
   radius?: number;
   children?: ReactNode;
+  onClick?: LeafletMouseEventHandlerFn;
 };
 
-export function LeafletStepPoint({ center, children, radius = 4 }: PointProps) {
+export function LeafletStepPoint({
+  center,
+  children,
+  radius = 4,
+  onClick,
+}: PointProps) {
   return (
     <CircleMarker
+      eventHandlers={{
+        click: onClick,
+      }}
       center={[center.lat, center.lng]}
       pathOptions={{
         color: "#000",
