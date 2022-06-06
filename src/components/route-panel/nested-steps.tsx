@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import { DirectionsStep } from "../../types/directions-result";
+import { useAppSelector, useAppDispatch } from "../../redux/redux-hooks";
+import { selectStep, set, unset } from "../../redux/slices/step-slice";
 
 const Wrapper = styled.div`
   overflow: hidden;
@@ -10,7 +12,7 @@ const Container = styled.div<{ show: boolean }>`
   transition: margin-top 600ms;
 `;
 
-const Step = styled.div`
+const Step = styled.div<{ active: boolean }>`
   padding: 1em 0em 1em 1em;
   border-bottom: 0.1em solid #e8eaed;
   cursor: pointer;
@@ -18,8 +20,9 @@ const Step = styled.div`
     border: none;
   }
   &:hover {
-    background: #eee;
+    background: #ccc;
   }
+  background: ${({ active }) => (active ? "#eee" : "inherited")};
 `;
 
 export default function NestedSteps({
@@ -29,9 +32,24 @@ export default function NestedSteps({
   steps: DirectionsStep[];
   show: boolean;
 }) {
+  const selectedStep = useAppSelector(selectStep);
+  const dispatch = useAppDispatch();
+
+  function onClickStepHandler(step: DirectionsStep) {
+    if (selectedStep && selectedStep.geometry === step.geometry) {
+      dispatch(unset());
+      return;
+    }
+    dispatch(set({ value: { geometry: step.geometry, type: "NESTED" } }));
+  }
+
   function showStep(step: DirectionsStep) {
     return (
-      <Step key={step.geometry} show={show}>
+      <Step
+        key={step.geometry}
+        onClick={step.steps?.length ? () => {} : () => onClickStepHandler(step)}
+        active={selectedStep?.geometry === step.geometry}
+      >
         <div dangerouslySetInnerHTML={{ __html: step.html_instructions }}></div>
         {step.steps?.length && steps.map((step) => showStep(step))}
       </Step>

@@ -61,9 +61,9 @@ export default function StepsInfo({
   for (const step of steps) {
     const startTime = departureTime + prevDuration + step.duration.value;
     preprocessedSteps.push(
-      <StepContainer>
+      <StepContainer key={step.geometry}>
         <Point />
-        <StepInfo key={step.geometry} startTime={startTime} step={step} />
+        <StepInfo startTime={startTime} step={step} />
       </StepContainer>
     );
     prevDuration += step.duration.value;

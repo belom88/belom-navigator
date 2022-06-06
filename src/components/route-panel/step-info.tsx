@@ -4,7 +4,10 @@ import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import NestedSteps from "./nested-steps";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAppSelector } from "../../redux/redux-hooks";
+import { selectStep } from "../../redux/slices/step-slice";
+import { lookupStepByGeometry } from "../../utils/directions-utils";
 
 const Container = styled.div`
   display: flex;
@@ -47,7 +50,7 @@ const StepCollapsable = styled.div<{ hasNestedSteps: boolean }>`
     if (hasNestedSteps) {
       return `
         &:hover {
-          background: #eee;
+          background: #ccc;
         }
       `;
     }
@@ -83,6 +86,17 @@ export default function StepInfo({
 }) {
   const [showNestedSteps, setShowNestedSteps] = useState(false);
   const duration = moment.duration(step.duration.value, "seconds");
+  const selectedStep = useAppSelector(selectStep);
+
+  useEffect(() => {
+    if (
+      selectedStep?.geometry &&
+      lookupStepByGeometry(selectedStep.geometry, step)
+    ) {
+      setShowNestedSteps(true);
+    }
+  }, [selectedStep]);
+
   return (
     <Container>
       <TimeRange>
