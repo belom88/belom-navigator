@@ -73,6 +73,7 @@ export function LeafletStartPoint({
         fillColor: cl_leaflet_marker_fill,
         fillOpacity: 1,
       }}
+      pane="markerPane"
       radius={5}
       eventHandlers={{
         click: onClick,
@@ -97,6 +98,7 @@ export function LeafletEndPoint({ center, children, onClick }: EdgePointProps) {
           fillColor: cl_leaflet_marker_fill,
           fillOpacity: 1,
         }}
+        pane="markerPane"
         radius={5}
         eventHandlers={{
           click: onClick,
@@ -114,6 +116,7 @@ export function LeafletEndPoint({ center, children, onClick }: EdgePointProps) {
           fillColor: cl_leaflet_marker_fill,
           fillOpacity: 1,
         }}
+        pane="markerPane"
         radius={1}
         eventHandlers={{
           click: onClick,
