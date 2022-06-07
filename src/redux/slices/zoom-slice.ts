@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 
 type HighlightState = {
+  /** Zoom value */
   value: number;
 };
 
@@ -13,6 +14,7 @@ export const highlightSlice = createSlice({
   name: "zoom",
   initialState,
   reducers: {
+    /** Set zoom value */
     set: (state, action: PayloadAction<number>) => {
       if (action.payload) {
         state.value = action.payload;

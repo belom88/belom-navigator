@@ -9,6 +9,10 @@ import LeafletRouteDetails from "./leaflet-route-details";
 import { useAppSelector } from "../../redux/redux-hooks";
 import { selectZoom } from "../../redux/slices/zoom-slice";
 
+/**
+ * Route visualization. Shows overview for low zoom or route in details - for high zoom value
+ * @param route
+ */
 export default function LeafletRoute({ route }: { route: DirectionRoute }) {
   const [overviewPolyline, setOverveiwPolyline] = useState<
     CartographicCoordinatesTuple[]

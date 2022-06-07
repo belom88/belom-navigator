@@ -6,9 +6,10 @@ import {
   faBus,
 } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { cl_text_secondary } from "../../constants/colors";
 
 const TravelMode = styled.span`
-  color: #70757a;
+  color: ${cl_text_secondary};
 `;
 
 const LineInfo = styled.span<{ backgroundColor: string; color: string }>`
@@ -19,6 +20,7 @@ const LineInfo = styled.span<{ backgroundColor: string; color: string }>`
   margin-left: 0.3em;
 `;
 
+/** Step overview for compact inline representation */
 export default function StepOverview({ step }: { step: DirectionsStep }) {
   return (
     <>

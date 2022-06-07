@@ -1,6 +1,9 @@
 import { ReactElement } from "react";
 import styled from "styled-components";
-import { DirectionsStep } from "../../types/directions-result";
+import {
+  DirectionsStep,
+  TimeWithTimeZone,
+} from "../../types/directions-result";
 import StepInfo from "./step-info";
 import moment from "moment";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +14,14 @@ import {
   set,
   unset,
 } from "../../redux/slices/highlight-slice";
+import { MomentTimeZones } from "../../constants/common";
+import {
+  cl_canvas,
+  cl_item_hovered,
+  cl_item_selected,
+  cl_point_outline,
+  cl_leaflet_walking_step,
+} from "../../constants/colors";
 
 const Container = styled.div`
   position: relative;
@@ -26,8 +37,8 @@ const Point = styled.div`
   display: flex;
   left: 7.8em;
   top: -0.5em;
-  background: #fff;
-  border: 0.2em solid #333;
+  background: ${cl_canvas};
+  border: 0.2em solid ${cl_point_outline};
   border-radius: 1em;
   width: 1em;
   height: 1em;
@@ -60,7 +71,7 @@ const StartTextContainer = styled.div`
 `;
 
 const EndTextContainer = styled(StartTextContainer)`
-  border-left: 0.5em dotted #06abf5;
+  border-left: 0.5em dotted ${cl_leaflet_walking_step};
   margin-top: -0.5em;
 `;
 
@@ -69,31 +80,47 @@ const Text = styled.div<{ active: boolean }>`
   margin-top: -1em;
   padding: 0.5em 1em 0.5em;
   cursor: pointer;
-  background: ${({ active }) => (active ? "#c1b2a3" : "inherit")};
+  background: ${({ active }) => (active ? cl_item_selected : "inherit")};
   ${({ active }) => `
       &:hover {
-        background: ${active ? "#c1b2a3" : "#ccc"};
+        background: ${active ? cl_item_selected : cl_item_hovered};
       }
     `}
 `;
 
+type StepInfoProps = {
+  /** Departure time of the leg */
+  departureTime: TimeWithTimeZone;
+  /** Start address of the leg */
+  startAddress: string;
+  /** Arrival time of the leg */
+  arrivalTime: TimeWithTimeZone;
+  /** End address of the leg */
+  endAddress: string;
+  /** Steps of the leg */
+  steps: DirectionsStep[];
+};
+
+/** Group of elements for schedule:
+ * * start of the leg
+ * * top level steps
+ * * end of the leg
+ */
 export default function StepsInfo({
   departureTime,
   startAddress,
   arrivalTime,
   endAddress,
   steps,
-}: {
-  departureTime: number;
-  startAddress: string;
-  arrivalTime: number;
-  endAddress: string;
-  steps: DirectionsStep[];
-}) {
+}: StepInfoProps) {
   const selectedHighlight = useAppSelector(selectHighlight);
   const dispatch = useAppDispatch();
 
-  function onClickStartEndHandler(edge: "START" | "END") {
+  /**
+   * Highlight start/end of the route on the map
+   * @param edge - edge of the route (start or end)
+   */
+  function onClickStartEndHandler(edge: "START" | "END"): void {
     if (
       selectedHighlight?.type === "START_END" &&
       selectedHighlight.edge === edge
@@ -115,9 +142,13 @@ export default function StepsInfo({
   return (
     <Container>
       <StepContainer>
+        {/* Start of the leg */}
         <EdgeContainer>
           <Time>
-            {moment.unix(departureTime).utcOffset("+02:00").format("LT")}
+            {moment
+              .unix(departureTime.value)
+              .utcOffset(MomentTimeZones[departureTime.time_zone])
+              .format("LT")}
           </Time>
           <StartTextContainer>
             <Text
@@ -134,9 +165,13 @@ export default function StepsInfo({
       </StepContainer>
       {preprocessedSteps}
       <StepContainer>
+        {/* End of the leg */}
         <EdgeContainer>
           <Time>
-            {moment.unix(arrivalTime).utcOffset("+02:00").format("LT")}
+            {moment
+              .unix(arrivalTime.value)
+              .utcOffset(MomentTimeZones[arrivalTime.time_zone])
+              .format("LT")}
           </Time>
           <EndTextContainer>
             <Text

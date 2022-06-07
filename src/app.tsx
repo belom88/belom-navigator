@@ -8,6 +8,11 @@ import Route from "./components/leaflet/leaflet-route";
 import RoutePanel from "./components/route-panel/route-panel";
 import LeafletEdgePoints from "./components/leaflet/leaflet-edge-points";
 
+/**
+ * Entry point of the application
+ * * Adds Leaflet map
+ * * Adds Route panel
+ */
 export default function App() {
   const [directionsResult, setDirectionsResult] =
     useState<DirectionsResult | null>(null);

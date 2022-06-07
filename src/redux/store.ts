@@ -4,8 +4,10 @@ import zoomReducer from "./slices/zoom-slice";
 
 const store = configureStore({
   reducer: {
+    // Highlight object to select/unselect markers on the map and elements on the router panel
     highlight: highlightReducer,
-    zoom: zoomReducer
+    // Zoom tracking - to switch on the route's overview mode
+    zoom: zoomReducer,
   },
 });
 
