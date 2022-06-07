@@ -23,10 +23,12 @@ const Step = styled.div<{ active: boolean }>`
   &:last-child {
     border: none;
   }
-  &:hover {
-    background: #ccc;
-  }
-  background: ${({ active }) => (active ? "#eee" : "inherited")};
+  background: ${({ active }) => (active ? "#c1b2a3" : "inherit")};
+  ${({ active }) => `
+      &:hover {
+        background: ${active ? "#c1b2a3" : "#ccc"};
+      }
+    `}
 `;
 
 export default function NestedSteps({

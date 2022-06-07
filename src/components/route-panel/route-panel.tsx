@@ -33,6 +33,7 @@ const HideButton = styled.button<{ collapsed: boolean }>`
   box-shadow: 0.3em 0.3em 0.4em #788;
   left: ${({ collapsed }) => (collapsed ? "0em" : "27em")};
   transition: left 900ms;
+  cursor: pointer;
 `;
 
 export default function RoutePanel({ routes }: { routes?: DirectionRoute[] }) {
