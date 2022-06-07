@@ -90,7 +90,7 @@ type Agency = {
   url: string;
 };
 
-type TimeWithTimeZone = {
+export type TimeWithTimeZone = {
   text: string;
   time_zone: string;
   value: number;

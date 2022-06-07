@@ -1,6 +1,7 @@
 import { DirectionLeg, DirectionRoute } from "../../types/directions-result";
 import LegInfo from "./leg-info";
 
+/** Route in details */
 export default function RouteDetails({ route }: { route: DirectionRoute }) {
   return (
     <>

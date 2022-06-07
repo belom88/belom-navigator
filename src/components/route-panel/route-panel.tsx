@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import RouteDetails from "./route-details";
+import { cl_canvas, cl_panel_shadow } from "../../constants/colors";
 
 const RoutePanelContainer = styled.div<{ collapsed: boolean }>`
   position: absolute;
@@ -12,11 +13,11 @@ const RoutePanelContainer = styled.div<{ collapsed: boolean }>`
   height: 100vh;
   width: 30em;
   z-index: 401;
-  background: #fff;
-  box-shadow: 0.3em 0.3em 0.4em #788;
+  background: ${cl_canvas};
+  box-shadow: 0.3em 0.3em 0.4em ${cl_panel_shadow};
   left: ${({ collapsed }) => (collapsed ? "-30em" : "0")};
   transition: left 900ms;
-  overflow-y: scroll;;
+  overflow-y: scroll; ;
 `;
 
 const HideButton = styled.button<{ collapsed: boolean }>`
@@ -29,19 +30,21 @@ const HideButton = styled.button<{ collapsed: boolean }>`
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-width: 0;
-  background: #fff;
-  box-shadow: 0.3em 0.3em 0.4em #788;
+  background: ${cl_canvas};
+  box-shadow: 0.3em 0.3em 0.4em ${cl_panel_shadow};
   left: ${({ collapsed }) => (collapsed ? "0em" : "27em")};
   transition: left 900ms;
   cursor: pointer;
 `;
 
+/** Route panel to show detailed information about routes */
 export default function RoutePanel({ routes }: { routes?: DirectionRoute[] }) {
   const [collapsed, setCollapsed] = useState(false);
   return (
     <>
       {routes && (
         <>
+          {/* Panel */}
           <RoutePanelContainer collapsed={collapsed}>
             {routes.map((route: DirectionRoute) => (
               <RouteDetails
@@ -50,6 +53,7 @@ export default function RoutePanel({ routes }: { routes?: DirectionRoute[] }) {
               ></RouteDetails>
             ))}
           </RoutePanelContainer>
+          {/* Show/hide button */}
           <HideButton
             collapsed={collapsed}
             onClick={() => setCollapsed(!collapsed)}

@@ -12,6 +12,16 @@ import {
   unset,
 } from "../../redux/slices/highlight-slice";
 import { lookupStepByGeometry } from "../../utils/directions-utils";
+import { MomentTimeZones } from "../../constants/common";
+import {
+  cl_canvas,
+  cl_item_hovered,
+  cl_item_selected,
+  cl_point_outline,
+  cl_splitter,
+  cl_leaflet_walking_step,
+  cl_step_info_duration_text,
+} from "../../constants/colors";
 
 const Container = styled.div`
   display: flex;
@@ -44,15 +54,15 @@ const StepContainer = styled.div<{
 `;
 
 const TransitStop = styled.div<{ active: boolean }>`
-  border-bottom: 0.1em solid #e8eaed;
-  border-top: 0.1em solid #e8eaed;
+  border-bottom: 0.1em solid ${cl_splitter};
+  border-top: 0.1em solid ${cl_splitter};
   padding: 1em 0 1em 1em;
   cursor: pointer;
   font-weight: 500;
-  background: ${({ active }) => (active ? "#c1b2a3" : "inherit")};
+  background: ${({ active }) => (active ? cl_item_selected : "inherit")};
   ${({ active }) => `
       &:hover {
-        background: ${active ? "#c1b2a3" : "#ccc"};
+        background: ${active ? cl_item_selected : cl_item_hovered};
       }
     `}
 `;
@@ -64,7 +74,7 @@ const StepCollapsable = styled.div<{ hasNestedSteps: boolean }>`
     if (hasNestedSteps) {
       return `
         &:hover {
-          background: #ccc;
+          background: ${cl_item_hovered};
         }
       `;
     }
@@ -85,7 +95,7 @@ const LineInfo = styled.span<{ backgroundColor: string; color: string }>`
 `;
 
 const Duration = styled.div`
-  color: #777;
+  color: ${cl_step_info_duration_text};
   font-weight: 300;
 `;
 
@@ -94,19 +104,21 @@ const Point = styled.div`
   display: flex;
   left: -9px; // px works better on differen devices
   top: -0.5em;
-  background: #fff;
-  border: 0.2em solid #333;
+  background: ${cl_canvas};
+  border: 0.2em solid ${cl_point_outline};
   border-radius: 1em;
   width: 1em;
   height: 1em;
 `;
 
+/** Step detailed information */
 export default function StepInfo({ step }: { step: DirectionsStep }) {
   const [showNestedSteps, setShowNestedSteps] = useState(false);
   const duration = moment.duration(step.duration.value, "seconds");
   const selectedHighlight = useAppSelector(selectHighlight);
   const dispatch = useAppDispatch();
 
+  /** Expand nested steps if one was selected on the map */
   useEffect(() => {
     if (
       selectedHighlight?.type === "NESTED" &&
@@ -117,7 +129,15 @@ export default function StepInfo({ step }: { step: DirectionsStep }) {
     }
   }, [selectedHighlight]);
 
-  function onClickStopHandler(step: DirectionsStep, edge: "START" | "END") {
+  /**
+   * Highlight transit station
+   * @param step - step of the station
+   * @param edge - edge (start/end) of the station
+   */
+  function onClickStopHandler(
+    step: DirectionsStep,
+    edge: "START" | "END"
+  ): void {
     if (
       selectedHighlight?.type === "STOP" &&
       selectedHighlight.step?.geometry === step.geometry &&
@@ -131,32 +151,43 @@ export default function StepInfo({ step }: { step: DirectionsStep }) {
 
   return (
     <Container>
+      {/* departure and arrival time of a transit step*/}
       <TimeRange>
         {step.travel_mode === "TRANSIT" && (
           <>
+            {/* departure time */}
             <Time>
               {moment
                 .unix(step.transit_details.departure_time.value)
-                .utcOffset("+02:00")
+                .utcOffset(
+                  MomentTimeZones[step.transit_details.departure_time.time_zone]
+                )
                 .format("LT")}
             </Time>
+            {/* arrival time */}
             <Time>
               {moment
                 .unix(step.transit_details.arrival_time.value)
-                .utcOffset("+02:00")
+                .utcOffset(
+                  MomentTimeZones[step.transit_details.arrival_time.time_zone]
+                )
                 .format("LT")}
             </Time>
           </>
         )}
       </TimeRange>
+      {/* Step details container */}
       <StepContainer
+        // Color for vertical  line of the step - between start/end time and step details
         borderColor={
           (step.travel_mode === "TRANSIT" && step.transit_details.line.color) ||
-          "#06abf5"
+          cl_leaflet_walking_step
         }
+        // Style for vertical  line of the step
         borderStyle={(step.travel_mode === "TRANSIT" && "solid") || "dotted"}
       >
         {<Point />}
+        {/* Transit start station */}
         {step.travel_mode === "TRANSIT" && (
           <TransitStop
             onClick={() => onClickStopHandler(step, "START")}
@@ -170,6 +201,7 @@ export default function StepInfo({ step }: { step: DirectionsStep }) {
           </TransitStop>
         )}
         <StepDetails hasNestedSteps={Boolean(step.steps?.length)}>
+          {/* Become collapse/expand button if has nested steps */}
           <StepCollapsable
             hasNestedSteps={Boolean(step.steps?.length)}
             onClick={() => setShowNestedSteps(!showNestedSteps)}
@@ -214,6 +246,7 @@ export default function StepInfo({ step }: { step: DirectionsStep }) {
             ></NestedSteps>
           )}
         </StepDetails>
+        {/* Transit end station */}
         {step.travel_mode === "TRANSIT" && (
           <TransitStop
             onClick={() => onClickStopHandler(step, "END")}

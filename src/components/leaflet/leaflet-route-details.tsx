@@ -7,6 +7,7 @@ import { LeafletStepPoint } from "./leaflet-points";
 import { useAppSelector, useAppDispatch } from "../../redux/redux-hooks";
 import { selectHighlight, set } from "../../redux/slices/highlight-slice";
 import LeafletTooltipForHighlight from "./leaflet-tooltip-for-highlight";
+import { cl_leaflet_walking_step } from "../../constants/colors";
 
 type PolylineTree =
   | ReactElement
@@ -14,6 +15,12 @@ type PolylineTree =
       [key: number]: PolylineTree;
     };
 
+/** Leaflet route in details:
+ * * Path divided on steps colored by transit line color or walking specific color
+ * * Step turn points
+ * * Start and end stations for transit steps
+ * @param route - route to view
+ */
 export default function LeafletRouteDetails({
   route,
 }: {
@@ -21,6 +28,10 @@ export default function LeafletRouteDetails({
 }) {
   const selectedHighlight = useAppSelector(selectHighlight);
   const dispatch = useAppDispatch();
+  /**
+   * Toggle selection of nested step (turn points of walking)
+   * @param step Nested step to toggle
+   */
   function toggleNestedStep(step: DirectionsStep) {
     if (
       selectedHighlight?.type === "NESTED" &&
@@ -32,6 +43,11 @@ export default function LeafletRouteDetails({
     }
   }
 
+  /**
+   * Toggle selection of transit edge - start station or end station
+   * @param step Transit step to toggle
+   * @param edge Edge of transit step - start or end
+   */
   function toggleStop(step: DirectionsStep, edge: "START" | "END") {
     if (
       selectedHighlight?.type === "STOP" &&
@@ -44,14 +60,16 @@ export default function LeafletRouteDetails({
     }
   }
 
-  function showStep(
-    step: DirectionsStep,
-    root: DirectionsStep | null = null
-  ): PolylineTree {
+  /**
+   * Recursive visualisation of nested steps
+   * @param step - step to show
+   * @returns - tree of react elements
+   */
+  function showStep(step: DirectionsStep): PolylineTree {
     if (step.steps?.length) {
       const steps = [];
       for (const nestedStep of step.steps) {
-        steps.push(showStep(nestedStep, root || step));
+        steps.push(showStep(nestedStep));
       }
       return steps;
     } else {
@@ -83,6 +101,7 @@ export default function LeafletRouteDetails({
 
   return (
     <>
+      {/* step paths */}
       {route.legs.map((leg) => leg.steps.map((step) => showStep(step)))}
       {route.legs.map((leg) =>
         leg.steps.map(
@@ -130,9 +149,14 @@ export default function LeafletRouteDetails({
   );
 }
 
+/**
+ * Define color for the step path polyline
+ * @param step - step to get color for
+ * @returns hex color
+ */
 function getStepSpecificOption(step: DirectionsStep): PolylineOptions {
   if (step.travel_mode === "WALKING") {
-    return { color: "#06abf5", dashArray: "1 12" };
+    return { color: cl_leaflet_walking_step, dashArray: "1 12" };
   } else {
     return { color: step.transit_details.line.color };
   }

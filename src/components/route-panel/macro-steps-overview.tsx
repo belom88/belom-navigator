@@ -4,16 +4,20 @@ import StepOverview from "./step-overview";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
+import { cl_steps_overview_splitter } from "../../constants/colors";
 
 const StepsOverview = styled.div`
   margin: 1rem 2rem 1rem;
 `;
 
 const Splitter = styled.span`
-  color: #cad3dc;
+  color: ${cl_steps_overview_splitter};
   margin: 0 1rem 0;
 `;
 
+/**
+ * Inline representation of steps
+ */
 export default function MacroStepsOverview({
   steps,
 }: {

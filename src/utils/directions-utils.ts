@@ -6,6 +6,11 @@ import {
   DirectionsStep,
 } from "../types/directions-result";
 
+/**
+ * Calculate common bounds for the array of routes
+ * @param routes routes to calculate
+ * @returns northeast and southwest angle of bounds
+ */
 export function getSummaryBounds(
   routes?: DirectionRoute[]
 ): [CartographicCoordinatesTuple, CartographicCoordinatesTuple] | null {
@@ -45,23 +50,12 @@ export function getSummaryBounds(
   ];
 }
 
-export function getStepByGeometry(
-  geometry: string,
-  routes: DirectionRoute[]
-): DirectionsStep | null {
-  for (const route of routes) {
-    for (const leg of route.legs) {
-      for (const step of leg.steps) {
-        const result = lookupStepByGeometry(geometry, step);
-        if (result !== null) {
-          return result;
-        }
-      }
-    }
-  }
-  return null;
-}
-
+/**
+ * Seek nested step that has matched geometry string
+ * @param geometry - geometry string to match
+ * @param step - root step to find in
+ * @return - step that has matched geometry string
+ */
 export function lookupStepByGeometry(
   geometry: string,
   step: DirectionsStep
@@ -80,6 +74,13 @@ export function lookupStepByGeometry(
   return null;
 }
 
-export function decodePolyline(encodedPolyline: string) {
+/**
+ * Decode geometry polyline with google codec
+ * @param - encoded geometry
+ * @returns - array of polyline coordinates
+ */
+export function decodePolyline(
+  encodedPolyline: string
+): CartographicCoordinatesTuple[] {
   return decode(encodedPolyline, 5);
 }

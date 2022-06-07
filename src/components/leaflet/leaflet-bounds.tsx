@@ -10,6 +10,10 @@ import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 import { selectHighlight } from "../../redux/slices/highlight-slice";
 import { set } from "../../redux/slices/zoom-slice";
 
+/**
+ * Pseudo-component to handle Leaflet events and methods
+ * @param routes - array of routes
+ */
 export default function LeafletBounds({
   routes,
 }: {
@@ -19,6 +23,7 @@ export default function LeafletBounds({
   const selectedHighlight = useAppSelector(selectHighlight);
   const dispatch = useAppDispatch();
 
+  /** Arrange zoom and center to fit routes in the view */
   function fitBounds() {
     const newBounds = getSummaryBounds(routes);
     if (newBounds) {
@@ -26,11 +31,17 @@ export default function LeafletBounds({
     }
   }
 
+  /**
+   * Wrapper for Leaflet map.setView method
+   * @param location
+   * @param zoom
+   */
   function changeView(location: CartographicCoordinates, zoom: number) {
     map.setView(location, zoom, { animate: true });
     dispatch(set(zoom));
   }
 
+  /** Highlight selected items on the map */
   useEffect(() => {
     let newZoom = map.getZoom();
     if (newZoom < 15) {
@@ -68,12 +79,13 @@ export default function LeafletBounds({
     }
   }, [selectedHighlight]);
 
+  /** fit map to extent of routes */
   useEffect(() => {
     fitBounds();
   }, [routes]);
 
+  /** Track zoom of the map */
   const zoomEventMap = useMapEvent("zoom", () => {
-    console.log(zoomEventMap.getZoom());
     dispatch(set(zoomEventMap.getZoom()));
   });
   return <></>;
