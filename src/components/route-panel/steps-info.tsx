@@ -32,19 +32,13 @@ const StepContainer = styled.div`
   position: relative;
 `;
 
-const Point = styled.div`
+const EndPoint = styled.div`
   position: absolute;
   display: flex;
-  left: 7.8em;
-  top: -0.5em;
   background: ${cl_canvas};
-  border: 0.2em solid ${cl_point_outline};
   border-radius: 1em;
   width: 1em;
   height: 1em;
-`;
-
-const EndPoint = styled(Point)`
   top: inherit;
   bottom: -4px;
   left: -9px;
@@ -54,7 +48,7 @@ const EndPoint = styled(Point)`
 const Time = styled.span`
   font-weight: 500;
   padding: 1em 0 0.5em;
-  flex-basis: 5em;
+  flex-basis: 6em;
 `;
 
 const EdgeContainer = styled.div`

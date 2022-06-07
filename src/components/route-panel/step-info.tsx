@@ -30,7 +30,7 @@ const Container = styled.div`
 
 const TimeRange = styled.div`
   display: flex;
-  flex-basis: 5em;
+  flex-basis: 6em;
   padding: 0;
   align-content: space-between;
   flex-wrap: wrap;
@@ -49,7 +49,7 @@ const StepContainer = styled.div<{
   width: 20em;
   margin-left: 1em;
   padding: 1em 0em 1em 1em;
-  border-left: 0.5em
+  border-left: 6px
     ${({ borderColor, borderStyle }) => `${borderStyle} ${borderColor}`};
 `;
 
