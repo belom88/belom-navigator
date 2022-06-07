@@ -46,8 +46,8 @@ const Point = styled.div`
 
 const EndPoint = styled(Point)`
   top: inherit;
-  bottom: 0em;
-  left: 7.8em;
+  bottom: -4px;
+  left: -9px;
   border: none;
 `;
 
@@ -73,6 +73,7 @@ const StartTextContainer = styled.div`
 const EndTextContainer = styled(StartTextContainer)`
   border-left: 0.5em dotted ${cl_leaflet_walking_step};
   margin-top: -0.5em;
+  position: relative;
 `;
 
 const Text = styled.div<{ active: boolean }>`
@@ -174,6 +175,9 @@ export default function StepsInfo({
               .format("LT")}
           </Time>
           <EndTextContainer>
+            <EndPoint>
+              <FontAwesomeIcon icon={faCircleDot} />
+            </EndPoint>
             <Text
               onClick={() => onClickStartEndHandler("END")}
               active={
@@ -185,9 +189,6 @@ export default function StepsInfo({
             </Text>
           </EndTextContainer>
         </EdgeContainer>
-        <EndPoint>
-          <FontAwesomeIcon icon={faCircleDot} />
-        </EndPoint>
       </StepContainer>
     </Container>
   );
