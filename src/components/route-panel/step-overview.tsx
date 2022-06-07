@@ -10,6 +10,7 @@ import { cl_text_secondary } from "../../constants/colors";
 
 const TravelMode = styled.span`
   color: ${cl_text_secondary};
+  line-height: 2em
 `;
 
 const LineInfo = styled.span<{ backgroundColor: string; color: string }>`
