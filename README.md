@@ -1,4 +1,4 @@
-# belom-navigator
+# Belom Navigator
 
 Code challege application for Huawei Research Center Germany
 
@@ -25,7 +25,7 @@ The application has been tested on Node.js v14.17.3 .
   npm install
 ```
 
-### Run the application
+## Run the application
 
 ```bash
   npm run start
@@ -33,7 +33,7 @@ The application has been tested on Node.js v14.17.3 .
 
 The application will run on the port 8080. The tab will be automaticaly opened in the default web browser. [Chrome](https://www.google.com/chrome/downloads) browser has been used for development and testing.
 
-### Tech stack used
+## Tech stack used
 
 - [TypeScript](https://www.typescriptlang.org)
 - [Leaflet](https://leafletjs.com)
