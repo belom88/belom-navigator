@@ -103,7 +103,7 @@ type StepInfoProps = {
 
 /** Group of elements for schedule:
  * * start of the leg
- * * top level steps
+ * * steps of the leg
  * * end of the leg
  */
 export default function StepsInfo({

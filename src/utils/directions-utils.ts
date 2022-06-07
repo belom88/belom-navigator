@@ -51,7 +51,7 @@ export function getSummaryBounds(
 }
 
 /**
- * Seek nested step tha has matched geometry string
+ * Seek nested step that has matched geometry string
  * @param geometry - geometry string to match
  * @param step - root step to find in
  * @return - step that has matched geometry string
@@ -75,7 +75,7 @@ export function lookupStepByGeometry(
 }
 
 /**
- * Decode geometry polyling with google codec
+ * Decode geometry polyline with google codec
  * @param - encoded geometry
  * @returns - array of polyline coordinates
  */

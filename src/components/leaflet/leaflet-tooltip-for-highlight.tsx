@@ -3,7 +3,7 @@ import { useAppSelector } from "../../redux/redux-hooks";
 import { selectHighlight } from "../../redux/slices/highlight-slice";
 import { DirectionsStep } from "../../types/directions-result";
 
-type TooltopProps = {
+type TooltipProps = {
   /** Mode of marker - "NESTED" - turn point of a "walking" step,
    * "STOP" - transit station, "START_END" - start/end of the route */
   mode: "NESTED" | "STOP" | "START_END";
@@ -23,7 +23,7 @@ export default function LeafletTooltipForHighlight({
   edge,
   text,
   step,
-}: TooltopProps) {
+}: TooltipProps) {
   const selectedHighlight = useAppSelector(selectHighlight);
   // Tooltip should be permanent for highlighed objects (start, end, station, turn point)
   const isPermanent =

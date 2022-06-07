@@ -16,7 +16,7 @@ type PolylineTree =
     };
 
 /** Leaflet route in details:
- * * Path divided on steps colored by line color or walking specific color
+ * * Path divided on steps colored by transit line color or walking specific color
  * * Step turn points
  * * Start and end stations for transit steps
  * @param route - route to view

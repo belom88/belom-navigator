@@ -17,7 +17,7 @@ type PointProps = {
   radius?: number;
   /** React children prop */
   children?: ReactNode;
-  /** click event handler */
+  /** Click event handler */
   onClick?: LeafletMouseEventHandlerFn;
 };
 
@@ -53,7 +53,7 @@ type EdgePointProps = {
   center: CartographicCoordinatesTuple;
   /** React children prop */
   children?: ReactNode;
-  /** click event handler */
+  /** Click event handler */
   onClick?: LeafletMouseEventHandlerFn;
 };
 
