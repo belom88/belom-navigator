@@ -22,30 +22,33 @@ export default function LeafletBounds({
   }
 
   useEffect(() => {
-    // Show start point
+    let newZoom = map.getZoom();
+    if (newZoom < 15) {
+      newZoom = 15;
+    }
     if (routes) {
       if (selectedHighlight?.type === "NESTED") {
         const step = selectedHighlight.step;
         if (step) {
-          map.setView(step?.start_location, 15);
+          map.setView(step?.start_location, newZoom);
         }
       } else if (selectedHighlight?.type === "START_END") {
         // TODO: works only for 1 route with 1 leg
         const leg = routes?.[0]?.legs?.[0];
         if (leg) {
           if (selectedHighlight.edge === "START") {
-            map.setView(leg.start_location, 15);
+            map.setView(leg.start_location, newZoom);
           } else if (selectedHighlight.edge === "END") {
-            map.setView(leg.end_location, 15);
+            map.setView(leg.end_location, newZoom);
           }
         }
       } else if (selectedHighlight?.type === "STOP") {
         const { step, edge } = selectedHighlight;
         if (step) {
           if (edge === "START") {
-            map.setView(step.transit_details.departure_stop.location, 15);
+            map.setView(step.transit_details.departure_stop.location, newZoom);
           } else if (edge === "END") {
-            map.setView(step.transit_details.arrival_stop.location, 15);
+            map.setView(step.transit_details.arrival_stop.location, newZoom);
           }
         }
       }

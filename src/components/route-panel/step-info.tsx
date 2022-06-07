@@ -35,9 +35,10 @@ const StepContainer = styled.div<{
   borderColor?: string;
   borderStyle?: string;
 }>`
+  position: relative;
   width: 20em;
   margin-left: 1em;
-  padding: 0em 0em 1em 1em;
+  padding: 1em 0em 1em 1em;
   border-left: 0.5em
     ${({ borderColor, borderStyle }) => `${borderStyle} ${borderColor}`};
 `;
@@ -48,15 +49,17 @@ const TransitStop = styled.div<{ active: boolean }>`
   padding: 1em 0 1em 1em;
   cursor: pointer;
   font-weight: 500;
-  &:hover {
-    background: #ccc;
-  }
-  background: ${({ active }) => (active ? "#eee" : "inherited")};
+  background: ${({ active }) => (active ? "#c1b2a3" : "inherit")};
+  ${({ active }) => `
+      &:hover {
+        background: ${active ? "#c1b2a3" : "#ccc"};
+      }
+    `}
 `;
 
 const StepCollapsable = styled.div<{ hasNestedSteps: boolean }>`
   padding: 0.5em 1em;
-  cursor: ${({ hasNestedSteps }) => (hasNestedSteps ? "pointer" : "inherited")};
+  cursor: ${({ hasNestedSteps }) => (hasNestedSteps ? "pointer" : "inherit")};
   ${({ hasNestedSteps }) => {
     if (hasNestedSteps) {
       return `
@@ -84,6 +87,18 @@ const LineInfo = styled.span<{ backgroundColor: string; color: string }>`
 const Duration = styled.div`
   color: #777;
   font-weight: 300;
+`;
+
+const Point = styled.div`
+  position: absolute;
+  display: flex;
+  left: -9px; // px works better on differen devices
+  top: -0.5em;
+  background: #fff;
+  border: 0.2em solid #333;
+  border-radius: 1em;
+  width: 1em;
+  height: 1em;
 `;
 
 export default function StepInfo({ step }: { step: DirectionsStep }) {
@@ -141,6 +156,7 @@ export default function StepInfo({ step }: { step: DirectionsStep }) {
         }
         borderStyle={(step.travel_mode === "TRANSIT" && "solid") || "dotted"}
       >
+        {<Point />}
         {step.travel_mode === "TRANSIT" && (
           <TransitStop
             onClick={() => onClickStopHandler(step, "START")}

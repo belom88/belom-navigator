@@ -69,10 +69,12 @@ const Text = styled.div<{ active: boolean }>`
   margin-top: -1em;
   padding: 0.5em 1em 0.5em;
   cursor: pointer;
-  &:hover {
-    background: #ccc;
-  }
-  background: ${({ active }) => (active ? "#eee" : "inherited")};
+  background: ${({ active }) => (active ? "#c1b2a3" : "inherit")};
+  ${({ active }) => `
+      &:hover {
+        background: ${active ? "#c1b2a3" : "#ccc"};
+      }
+    `}
 `;
 
 export default function StepsInfo({
@@ -106,7 +108,6 @@ export default function StepsInfo({
   for (const step of steps) {
     preprocessedSteps.push(
       <StepContainer key={step.geometry}>
-        {<Point />}
         <StepInfo step={step} />
       </StepContainer>
     );
