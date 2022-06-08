@@ -30,7 +30,7 @@ const Container = styled.div`
 
 const TimeRange = styled.div`
   display: flex;
-  flex-basis: 6em;
+  flex-basis: 75px;
   padding: 0;
   align-content: space-between;
   flex-wrap: wrap;
