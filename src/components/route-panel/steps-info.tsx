@@ -48,7 +48,7 @@ const EndPoint = styled.div`
 const Time = styled.span`
   font-weight: 500;
   padding: 1em 0 0.5em;
-  flex-basis: 6em;
+  flex-basis: 75px;
 `;
 
 const EdgeContainer = styled.div`

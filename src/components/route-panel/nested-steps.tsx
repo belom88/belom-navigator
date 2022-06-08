@@ -12,13 +12,14 @@ import {
   cl_splitter,
 } from "../../constants/colors";
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ show: boolean }>`
   overflow: hidden;
+  height: ${({ show }) => (show ? "fit-content" : "0")};
 `;
 
 const Container = styled.div<{ show: boolean }>`
-  margin-top: ${({ show }) => (show ? 0 : "-105%")};
-  transition: margin-top 600ms;
+  transform: translateY(${({ show }) => (show ? "0" : "-100%")});
+  transition: transform 600ms;
 `;
 
 const Step = styled.div<{ active: boolean }>`
@@ -83,7 +84,7 @@ export default function NestedSteps({ steps, show }: NestedStepsProps) {
     );
   }
   return (
-    <Wrapper>
+    <Wrapper show={show}>
       <Container show={show}>{steps.map((step) => showStep(step))}</Container>
     </Wrapper>
   );
