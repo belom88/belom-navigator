@@ -38,7 +38,7 @@ const TimeRange = styled.div`
 
 const Time = styled.span`
   font-weight: 500;
-  padding: 1em 0 2em;
+  padding: 2em 0 2em;
 `;
 
 const StepContainer = styled.div<{
